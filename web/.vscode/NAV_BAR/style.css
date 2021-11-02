@@ -1,0 +1,109 @@
+/* color를 고정해두고 root에서만 변경할 수 있도록 해서 편의성 올림 */
+:root {
+    --text-color: #f0f4f5;
+    --background-color: #263343;
+    --accent-color: #d49466;
+}
+
+/* 가장큰 body에 margin = 0 해서 header가 꽉차게 , font 설정 */
+body{
+    margin: 0;
+    font-family: 'Source Sans Pro';
+}
+/* link 밑의 줄 삭제, color도 설정 */
+a{
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+/* 유연하게 layout을 조정할 수 있는 flex로 변경, space-between으로 가운데에만 공백주기 */
+/* align-items = center로 텍스트가 중앙에 올 수 있도록 설정 */
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-color);
+    padding: 8px 12px;
+}
+/* logo font-size와 color 설정 */
+.navbar__logo {
+    font-size: 24px;
+    color: var(--text-color);
+}
+/* logo의 i(icon)의 color 설정 */
+.navbar__logo i{
+    color: var(--accent-color);
+}
+/* menu flex로 설정, list 요소들 앞에 점 style none, padding-left = 0으로 하여 */
+.navbar__menu{
+    display: flex;
+    list-style: none;
+     padding-left: 0;
+} 
+/* 나중에 아이콘 클릭 범위를 넓히기 위해서 */
+.navbar__menu li{
+    padding: 8px 12px;  
+}
+/* menu에 마우스를 올리면 */
+.navbar__menu li:hover{
+    background-color: var(--accent-color);
+    border-radius: 4px;
+}
+
+.navbar__icons{
+    display: flex;
+    list-style: none;
+    color: var(--text-color);
+    padding-left: 0;
+}
+
+.navbar__icons li{
+    padding: 8px 12px;
+}
+
+.navbar__toggleButton{
+    display: none;
+    position: absolute;
+    right: 32px;
+    font-size: 24px;
+    color: var(--accent-color);
+} 
+
+@media screen and (max-width: 768px){
+    .navbar{
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8px 24px;
+    }
+
+    .navbar__menu{
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .navbar__menu li{
+        width: 100%;
+        text-align: center;
+    }
+
+    .navbar__icons{
+        display: none;
+        justify-content: center;
+        width: 100%
+    }
+
+    .navbar__toggleButton{
+        display: block;
+        position: absolute;
+        right: 32px;
+        font-size: 24px;
+        color: var(--accent-color);
+    } 
+
+    .navbar__menu.active,
+    .navbar__icons.active{
+        display: flex;
+    }
+}
