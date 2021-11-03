@@ -11,9 +11,10 @@ import os
 import cv2
 import numpy as np
 
-from scripts.estimator import TfPoseEstimator
-from scripts.networks import get_graph_path, model_wh
-import scripts.action_classification as act_class
+# from scripts import estimator
+from models.scripts.estimator import TfPoseEstimator
+from models.scripts.networks import get_graph_path, model_wh
+import models.scripts.action_classification as act_class
 
 logger = logging.getLogger('TfPoseEstimator-WebCam')
 logger.setLevel(logging.DEBUG)
@@ -63,17 +64,8 @@ if __name__ == '__main__':
         # 시작 카운트, 시작 프레임넘버, 종료 카운트, 감지 여부, 로그넘버를 임시저장함
         human_action_detection[label] = {'s_count' : 4, 's_frame' : 0, 'e_count' : 0, 'is_detected' : False, 'log_num' : 0}
 
-    
     # 최종 저장할 이상행동 감지 로그변수
     abnormal_action_log = []
-
-
-
-
-
-
-
-
 
     # 비디오의 첫 프레임 읽기
     logger.debug('video read+')

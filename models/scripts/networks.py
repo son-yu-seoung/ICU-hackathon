@@ -3,7 +3,7 @@ from os.path import dirname, abspath
 
 import tensorflow as tf
 # from tf_pose.network_mobilenet import MobilenetNetwork
-from scripts.network_mobilenet_thin import MobilenetNetworkThin
+from models.scripts.network_mobilenet_thin import MobilenetNetworkThin
 
 # from tf_pose.network_cmu import CmuNetwork
 # from tf_pose.network_personlab import PersonLabNetwork

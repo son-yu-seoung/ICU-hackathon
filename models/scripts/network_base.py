@@ -1,13 +1,13 @@
 from __future__ import absolute_import
 
 import sys
-
+# from tensorflow.python.profiler import trace
 import abc
 import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
-from scripts import common
+from models.scripts import common
 
 DEFAULT_PADDING = 'SAME'
 

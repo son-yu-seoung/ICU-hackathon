@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import tensorflow as tf
 
-from scripts import network_base
+from models.scripts import network_base
 
 
 class MobilenetNetworkThin(network_base.BaseNetwork):
