@@ -12,8 +12,8 @@ base_dir = '../'
 if __name__ == '__main__':
     # 각종 argument들을 받음.
     parser = argparse.ArgumentParser(description='tf-pose-estimation realtime webcam')
-    parser.add_argument('--video', type=str, default='datasets/A.mp4')
-    parser.add_argument('--xml-label', type=str, default='datasets/A.xml')
+    parser.add_argument('--video', type=str, default='datasets/train/video/A.mp4')
+    parser.add_argument('--xml-label', type=str, default='datasets/train/target/A.xml')
     parser.add_argument('--category', type=str, default='train')
 
     parser.add_argument('--resize', type=str, default='0x0')
