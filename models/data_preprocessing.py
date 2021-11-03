@@ -7,7 +7,7 @@ from scripts.estimator import TfPoseEstimator
 from scripts.networks import get_graph_path, model_wh
 import scripts.action_classification as act_class
 
-base_dir = './'
+base_dir = '../'
 
 if __name__ == '__main__':
     # 각종 argument들을 받음.

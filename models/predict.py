@@ -16,6 +16,8 @@ from models.scripts.estimator import TfPoseEstimator
 from models.scripts.networks import get_graph_path, model_wh
 import models.scripts.action_classification as act_class
 
+print(11111111111111111111111111111111111111111111111111111111111111111)
+
 logger = logging.getLogger('TfPoseEstimator-WebCam')
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
