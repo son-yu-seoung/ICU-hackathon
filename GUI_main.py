@@ -16,12 +16,12 @@ from models import predict
 class CWidget(QWidget):
     def __init__(self):
         super().__init__()
-        # loadUi('main.ui', self)
         loadUi('main.ui', self) # Qt Designer로 생성한 ui파일 load
  
         # Multimedia Object, view = QVideoWidget
         self.mp = CMultiMedia(self, self.view) # media.py에 선언된 CMultiMedia 객체 생성...
- 
+        self.video_path = None
+
         # video background color
         pal = QPalette() # 각 위젯 상태에 대한 색상 그룹을 포함한다.
         pal.setColor(QPalette.Background, Qt.black) # (cr, color)
@@ -38,12 +38,10 @@ class CWidget(QWidget):
         self.btn_judgment.clicked.connect(self.clickJudgment)
 
         # list = QListWidget, (vol, bar) = QSlider
-        self.list.itemDoubleClicked.connect(self.dbClickList) # list안의 item을 double click 할 시
         self.bar.sliderMoved.connect(self.barChanged) # time line을 조정할 시
  
     def clickPlay(self):
-        index = self.list.currentRow() # 현재 선택된 list의 index 반환        
-        self.mp.playMedia(index)
+        self.mp.playMedia(0)
  
     def clickStop(self):
         self.mp.stopMedia()
@@ -52,12 +50,9 @@ class CWidget(QWidget):
         self.mp.pauseMedia()
  
     def clickJudgment(self):
+        test = predict.Predict(self.video_path)
+        test.start_predict()
         # predict.py 객체 생성 후 영상을 predict -> 영상 다시 띄우기
-        pass
-
-    def dbClickList(self, item): # 상황이 발생한 위치로 영상 이동
-        row = self.list.row(item) # 더블 클릭한 row 반환
-        self.mp.playMedia(row)
  
     def barChanged(self, pos): 
         print(pos) 
@@ -112,15 +107,11 @@ class MyApp(QMainWindow):
                                              , 'Select one or more files to open'
                                              , ''
                                              , 'Video (*.mp4 *.mpg *.mpeg *.avi *.wma)') 
-         
-        if files:
-            cnt = len(files)       
-            row = self.wg.list.count()        
-            for i in range(row, row+cnt):
-                self.wg.list.addItem(files[i-row])
-            self.wg.list.setCurrentRow(0)
+        
+        self.wg.video_path = files[0] 
+        self.wg.mp.addMedia(files)       
  
-            self.wg.mp.addMedia(files)
+        
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)

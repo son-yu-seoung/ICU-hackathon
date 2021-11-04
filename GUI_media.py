@@ -28,12 +28,10 @@ class CMultiMedia(QObject):
         self.position_signal.connect(self.parent.updatePos)
  
     def addMedia(self, files):
+        self.list.clear()
         for f in files:
-            url = QUrl.fromLocalFile(f)
+            url = QUrl.fromLocalFile(f) # path를 uri화? 속도 유리
             self.list.addMedia(QMediaContent(url))
- 
-    def delMedia(self, index):
-        self.list.removeMedia(index)
  
     def playMedia(self, index):
         self.list.setCurrentIndex(index)
@@ -44,22 +42,6 @@ class CMultiMedia(QObject):
  
     def pauseMedia(self):
         self.player.pause()
- 
-    def forwardMedia(self, end=False):
-        if end:
-            self.list.setCurrentIndex(0)
-        else:
-            self.list.next()
- 
-    def prevMedia(self, begin=False):
-        if begin:
-            cnt = self.list.mediaCount()
-            self.list.setCurrentIndex(cnt-1)
-        else:
-            self.list.previous()
- 
-    def volumeMedia(self, vol):
-        self.player.setVolume(vol)
  
     def posMoveMedia(self, pos):
         self.player.setPosition(pos)
