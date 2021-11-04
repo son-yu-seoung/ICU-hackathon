@@ -3,9 +3,9 @@ import os
 import cv2
 import numpy as np
 
-from scripts.estimator import TfPoseEstimator
-from scripts.networks import get_graph_path, model_wh
-import scripts.action_classification as act_class
+from models.scripts.estimator import TfPoseEstimator
+from models.scripts.networks import get_graph_path, model_wh
+import models.scripts.action_classification as act_class
 
 base_dir = '../'
 

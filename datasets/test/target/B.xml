@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<annotation>
+    <folder>vandalism</folder>
+    <filename>488-2_cam03_vandalism01_place09_day_winter.mp4</filename>
+    <source>
+        <database>NIA2019 Database v1</database>
+        <annotation>NIA2019</annotation>
+    </source>
+    <size>
+        <width>3840</width>
+        <height>2160</height>
+        <depth>3</depth>
+    </size>
+    <header>
+        <duration>00:05:17.3</duration>
+        <fps>30</fps>
+        <frames>9518</frames>
+        <inout>IN</inout>
+        <location>PLACE09</location>
+        <season>WINTER</season>
+        <weather>SUNNY</weather>
+        <time>DAY</time>
+        <population>1</population>
+        <character>M20</character>
+    </header>
+    <event>
+        <eventname>vandalism</eventname>
+        <starttime>00:04:48.3</starttime>
+        <duration>00:00:21.7</duration>
+    </event>
+    <object>
+        <objectname>person_1</objectname>
+        <position>
+            <keyframe>8649</keyframe>
+            <keypoint>
+                <x>1656</x>
+                <y>1120</y>
+            </keypoint>
+        </position>
+        <action>
+            <actionname>pushing</actionname>
+            <frame>
+                <start>8649</start>
+                <end>8690</end>
+            </frame>
+        </action>
+        <action>
+            <actionname>kicking</actionname>
+            <frame>
+                <start>9254</start>
+                <end>9300</end>
+            </frame>
+        </action>
+    </object>
+</annotation>
