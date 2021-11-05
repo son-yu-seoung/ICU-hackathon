@@ -10,7 +10,7 @@ from GUI_media import CMultiMedia # Qt에서 제공하는 멀티미디어 라이
 import sys
 import datetime
 
-from models import predict2
+from models import predict
 
 
 class CWidget(QWidget):
@@ -20,7 +20,7 @@ class CWidget(QWidget):
  
         # Multimedia Object, view = QVideoWidget
         self.mp = CMultiMedia(self, self.view) # media.py에 선언된 CMultiMedia 객체 생성...
-        self.original_video_path = None
+        self.video_path = None
 
         # video background color
         pal = QPalette() # 각 위젯 상태에 대한 색상 그룹을 포함한다.
@@ -50,7 +50,7 @@ class CWidget(QWidget):
         self.mp.pauseMedia()
  
     def clickJudgment(self):
-        test = predict2.Predict(self.video_path)
+        test = predict.Predict(self.video_path)
         test.start_predict()
         # predict.py 객체 생성 후 영상을 predict -> 영상 다시 띄우기
  
@@ -108,7 +108,7 @@ class MyApp(QMainWindow):
                                              , ''
                                              , 'Video (*.mp4 *.mpg *.mpeg *.avi *.wma)') 
         
-        self.wg.original_video_path = files[0] 
+        self.wg.video_path = files[0] 
         self.wg.mp.addMedia(files)       
  
         
@@ -129,7 +129,7 @@ from GUI_media import CMultiMedia # Qt에서 제공하는 멀티미디어 라이
 import sys
 import datetime
 
-from models import predict2
+from models import predict
 
 
 class CWidget(QWidget):
@@ -139,7 +139,7 @@ class CWidget(QWidget):
  
         # Multimedia Object, view = QVideoWidget
         self.mp = CMultiMedia(self, self.view) # media.py에 선언된 CMultiMedia 객체 생성...
-        self.original_video_path = None
+        self.video_path = None
 
         # video background color
         pal = QPalette() # 각 위젯 상태에 대한 색상 그룹을 포함한다.
@@ -169,7 +169,7 @@ class CWidget(QWidget):
         self.mp.pauseMedia()
  
     def clickJudgment(self):
-        test = predict2.Predict(self.video_path)
+        test = predict.Predict(self.video_path)
         test.start_predict()
         # predict.py 객체 생성 후 영상을 predict -> 영상 다시 띄우기
  
@@ -227,7 +227,7 @@ class MyApp(QMainWindow):
                                              , ''
                                              , 'Video (*.mp4 *.mpg *.mpeg *.avi *.wma)') 
         
-        self.wg.original_video_path = files[0] 
+        self.wg.video_path = files[0] 
         self.wg.mp.addMedia(files)       
  
         

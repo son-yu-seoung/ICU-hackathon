@@ -7,6 +7,7 @@ import argparse
 import logging
 import time
 import os
+import csv
 
 import cv2, sys
 import numpy as np
@@ -119,9 +120,13 @@ class Predict:
         video_name = path[-2]
 
         fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-        if not os.path.exists('output_video'):
-            os.makedirs('output_video')
-        out = cv2.VideoWriter('output_video\\output_' + video_name + '.avi', fourcc, video_fps, (frame.shape[1], frame.shape[0]), isColor=True)
+
+        output_dir = 'predict'
+        if not os.path.exists('predict'):
+            os.makedirs('predict')
+        output_video = os.path.join('.', output_dir, 'output_' + video_name + '.avi')
+        output_log = os.path.join('.', output_dir, 'output_' + video_name + '.csv')
+        out = cv2.VideoWriter(output_video, fourcc, video_fps, (frame.shape[1], frame.shape[0]), isColor=True)
 
         # 현재 처리중인 프레임 번호
         processing_frame = 0
@@ -154,6 +159,9 @@ class Predict:
                 if fail_count > 100:
                     break
                 continue
+
+            if processing_frame > 50:
+                break
 
             '''
             직전 회차에 처리시간동안 흘렀어야할 프레임만큼 건너뜀
@@ -247,7 +255,7 @@ class Predict:
 
             # 처리한 한 프레임에 대해 이미지를 출력한다.
             # 이 때, output_image[상:하, 좌:우]를 (픽셀단위로) 하면 원하는 부분만 출력할 수도 있다.
-            cv2.imshow('tf-pose-estimation result', output_image)
+            # cv2.imshow('tf-pose-estimation result', output_image)
             
             predict_action_list.discard('0001')
             
@@ -298,9 +306,16 @@ class Predict:
                 abaction_dict['is_detected'] = False
         video.release()
 
+        with open(output_log, 'w', newline='') as f:
+            writer = csv.writer(f)
+            for log in abnormal_action_log:
+                writer.writerow(log)
+
         cv2.destroyAllWindows()
+        print(output_video, output_log)
+        return output_video, output_log
 
     def start_predict(self):
         e, w, h = self.load_openPose(self.args)
         human_action_detection = self.load_label(self.args)
-        self.video_and_predict(self.video_path, self.args, e, w, h, human_action_detection)
+        return self.video_and_predict(self.video_path, self.args, e, w, h, human_action_detection)
