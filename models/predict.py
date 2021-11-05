@@ -7,7 +7,7 @@ import argparse
 import logging
 import time
 import os
-import csv
+import pandas
 
 import cv2, sys
 import numpy as np
@@ -63,11 +63,11 @@ class Predict:
 
     def load_label(self, args):
         # 모델의 라벨들을 불러옴
-        labels = act_class.load_labels(args.labels)
+        self.labels = act_class.load_labels(args.labels)
 
         # 불러온 라벨들로 이상행동을 탐지하기 위한 상태변수 추가
         human_action_detection = {}
-        for label in labels[1:]: # 0001(정상) 말고 나머지에 대해서
+        for label in self.labels[1:]: # 0001(정상) 말고 나머지에 대해서
             # 시작 카운트, 시작 프레임넘버, 종료 카운트, 감지 여부, 로그넘버를 임시저장함
             human_action_detection[label] = {'s_count' : 4, 's_frame' : 0, 'e_count' : 0, 'is_detected' : False, 'log_num' : 0}
 
@@ -84,6 +84,8 @@ class Predict:
 
         # 최종 저장할 이상행동 감지 로그변수
         abnormal_action_log = []
+        abnormal_action_count = [0] * len(self.labels[1:])
+
         
         while frame.shape[1] > video_width_limit:
             frame = cv2.resize(frame, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
@@ -125,7 +127,8 @@ class Predict:
         if not os.path.exists('predict'):
             os.makedirs('predict')
         output_video = os.path.join('.', output_dir, 'output_' + video_name + '.avi')
-        output_log = os.path.join('.', output_dir, 'output_' + video_name + '.csv')
+        output_log = os.path.join('.', output_dir, 'output_log_' + video_name + '.csv')
+        output_count = os.path.join('.', output_dir, 'output_count_' + video_name + '.csv')
         out = cv2.VideoWriter(output_video, fourcc, video_fps, (frame.shape[1], frame.shape[0]), isColor=True)
 
         # 현재 처리중인 프레임 번호
@@ -275,6 +278,8 @@ class Predict:
                     abnormal_action_log.append([detection_log_num, abaction, human_action_detection[abaction]['s_frame']])
                     detection_log_num += 1
 
+                    abnormal_action_count[self.labels[1:].index(abaction)] += 1
+
             detection_cycle += 1
             if detection_cycle % 2 == 0:
                 detection_cycle = 0
@@ -306,10 +311,14 @@ class Predict:
                 abaction_dict['is_detected'] = False
         video.release()
 
-        with open(output_log, 'w', newline='') as f:
-            writer = csv.writer(f)
-            for log in abnormal_action_log:
-                writer.writerow(log)
+        abnormal_action_log_to_savecsv = []
+        for log in abnormal_action_log:
+            abnormal_action_log_to_savecsv.append((str(log[2]) + '-' + str(log[3]), log[1]))
+
+        log_df = pandas.DataFrame(abnormal_action_log_to_savecsv, columns=['time', 'action'])
+        log_df.to_csv(output_log)
+        count_df = pandas.DataFrame([tuple(abnormal_action_count)], columns=self.labels[1:])
+        count_df.to_csv(output_count)
 
         cv2.destroyAllWindows()
         print(output_video, output_log)
