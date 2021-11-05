@@ -97,7 +97,7 @@ class Predict:
         fail_count = 0
 
         # 동영상 파일의 초당 프레임 수
-        video_fps = 30
+        video_fps = video.get(cv2.CAP_PROP_FPS)
 
         # 경로를 받음
         path = v_path
@@ -163,7 +163,7 @@ class Predict:
                     break
                 continue
 
-            if processing_frame > 50:
+            if processing_frame > 200:
                 break
 
             '''
@@ -321,8 +321,8 @@ class Predict:
         count_df.to_csv(output_count)
 
         cv2.destroyAllWindows()
-        print(output_video, output_log)
-        return output_video, output_log
+        print(output_video, output_log, output_count)
+        return output_video, output_log, output_count, video_fps
 
     def start_predict(self):
         e, w, h = self.load_openPose(self.args)

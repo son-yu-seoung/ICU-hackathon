@@ -44,7 +44,15 @@ class CMultiMedia(QObject):
         self.player.pause()
  
     def posMoveMedia(self, pos):
+        self.player.stop()
         self.player.setPosition(pos)
+    
+    def moveStart_t(self, pos):
+        print(f'{pos}mm(sec)로 이동')
+        self.player.stop()
+        self.player.setPosition(pos)
+
+        pass
  
     def stateChanged(self, state): # 발생시 위젯으로 전달
         msg = ''

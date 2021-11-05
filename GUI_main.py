@@ -11,6 +11,7 @@ import sys
 import datetime
 
 from models import predict
+import pandas as pd
 
 
 class CWidget(QWidget):
@@ -38,6 +39,7 @@ class CWidget(QWidget):
         self.btn_judgment.clicked.connect(self.clickJudgment)
 
         # list = QListWidget, (vol, bar) = QSlider
+        self.list.itemDoubleClicked.connect(self.dbClickLogs)
         self.bar.sliderMoved.connect(self.barChanged) # time line을 조정할 시
  
     def clickPlay(self):
@@ -51,16 +53,41 @@ class CWidget(QWidget):
  
     def clickJudgment(self):
         test = predict.Predict(self.original_video_path)
-        test.start_predict() # return = output_video_path, log file
+        output_video_path, log_path, count_path, self.video_fps  = test.start_predict() # return = output_video_path, log file, count file
         
-        self.label_total.setText(f'normal - {703}, abnormal {345}')
+        # output_video_path를 이용
+        self.mp.addMedia(output_video_path)
+
+        # log_file를 이용
+        log_csv = pd.read_csv(log_path)
+        for i in range(len(log_csv)):
+            if log_csv.iloc[i][2] == 2:
+                log = '★★★ ' + str(log_csv.iloc[i][1]) + ' ' + 'A 행동' + ' ★★★'
+                self.list.addItem(log)
+            elif log_csv.iloc[i][2] == 3:
+                log = '★★★ ' + str(log_csv.iloc[i][1]) + ' ' + 'B 행동' + ' ★★★'
+                self.list.addItem(log)
+            else:
+                log = '★★★ ' + str(log_csv.iloc[i][1]) + ' ' + 'C 행동' + ' ★★★'
+                self.list.addItem(log)
+
+        # count_path를 이용
+        count_csv = pd.read_csv(count_path)
+
+        count_A = count_csv.iloc[0][1]
+        count_B = count_csv.iloc[0][2]
+        count_C = count_csv.iloc[0][3]
+
+        count_total = count_A + count_B + count_C
+
+        self.label_total.setText(f'abnormal - {count_total}')
         self.label_total.adjustSize()
-        self.label_A.setText(f'A 행동 - {10}')
+        self.label_A.setText(f'A 행동 - {count_A}')
         self.label_total.adjustSize()
-        self.label_B.setText(f'B 행동 - {10}')
-        self.label_B.adjustSize()
-        self.label_C.setText(f'C 행동 - {10}')
-        self.label_C.adjustSize()
+        self.label_B.setText(f'B 행동 - {count_B}')
+        # self.label_B.adjustSize()
+        # self.label_C.setText(f'C 행동 - {count_C}')
+        # self.label_C.adjustSize()
 
 
         # self.wg.lbl_pos.setText(txt)
@@ -69,8 +96,20 @@ class CWidget(QWidget):
 
         #self.mp.addMedia(output_video_path) # clickPlay 하면 실행됨
  
+    def dbClickLogs(self):
+        row = self.list.currentRow()
+        row_val= self.list.item(row)
+        row_val = row_val.text() 
+
+        time_val = row_val.split()[1]
+        start_t = time_val.split('-')[0]
+        end_t = time_val.split('-')[1]
+
+        mm = (int(start_t) / self.video_fps) * 1000
+
+        self.mp.moveStart_t(mm)
+
     def barChanged(self, pos): 
-        print(pos) 
         self.mp.posMoveMedia(pos) # 타임라인 변경에 따른 영상 조정   
  
     def updateState(self, msg): # 언제 메서드가 실행 되는지 모르겠음
