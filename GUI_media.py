@@ -27,11 +27,11 @@ class CMultiMedia(QObject):
         self.duration_signal.connect(self.parent.updateBar)
         self.position_signal.connect(self.parent.updatePos)
  
-    def addMedia(self, files):
+    def addMedia(self, file):
         self.list.clear()
-        for f in files:
-            url = QUrl.fromLocalFile(f) # path를 uri화? 속도 유리
-            self.list.addMedia(QMediaContent(url))
+
+        url = QUrl.fromLocalFile(file)
+        self.list.addMedia(QMediaContent(url))
  
     def playMedia(self, index):
         self.list.setCurrentIndex(index)
